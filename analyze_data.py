@@ -72,66 +72,72 @@ def plot_investor_trends(df, output_dir="results"):
     """투자자별 거래 추이 시각화"""
     os.makedirs(output_dir, exist_ok=True)
 
-    # 1. 일별 순매수 추이
-    fig, axes = plt.subplots(3, 1, figsize=(15, 12))
+    # 억원 단위로 변환
+    df_billions = df / 100000000
 
-    # 주요 투자자 그룹 확인 후 플롯
-    columns = df.columns.tolist()
-    print(f"\n사용 가능한 컬럼: {columns}")
+    # 1. 모든 투자자별 일별 순매수 추이 (하나의 차트에)
+    fig, ax = plt.subplots(figsize=(16, 8))
 
-    # 개인, 외국인, 기관 데이터가 있는지 확인하고 플롯
-    investor_mapping = {
-        'Individual': ['개인', '개인투자자', 'Individual'],
-        'Foreigner': ['외국인', '외인', 'Foreigner'],
-        'Institution': ['기관', '기관계', 'Institution']
-    }
+    # 색상 팔레트
+    colors = ['#E74C3C', '#3498DB', '#2ECC71', '#9B59B6', '#F39C12', '#1ABC9C', '#34495E']
 
-    # 실제 컬럼명 찾기
-    plot_columns = {}
-    for key, possible_names in investor_mapping.items():
-        for col in columns:
-            if any(name in col for name in possible_names):
-                plot_columns[key] = col
-                break
+    for idx, col in enumerate(df.columns):
+        ax.plot(df_billions.index, df_billions[col],
+                label=col, linewidth=2, color=colors[idx % len(colors)])
 
-    if not plot_columns:
-        # 컬럼이 없으면 처음 3개 컬럼 사용
-        plot_columns = {f'Investor_{i}': col for i, col in enumerate(columns[:3])}
-
-    print(f"\n플롯할 컬럼: {plot_columns}")
-
-    # 억원 단위로 변환하여 플롯
-    for idx, (key, col) in enumerate(plot_columns.items()):
-        if col in df.columns:
-            data = df[col] / 100000000  # 억원 단위
-            axes[idx].plot(data.index, data.values, linewidth=1.5)
-            axes[idx].axhline(y=0, color='r', linestyle='--', alpha=0.3)
-            axes[idx].set_title(f'{col} Net Purchase Trend', fontsize=12, pad=10)
-            axes[idx].set_ylabel('Net Purchase (100M KRW)')
-            axes[idx].grid(True, alpha=0.3)
+    ax.axhline(y=0, color='red', linestyle='--', alpha=0.3, linewidth=1)
+    ax.set_title('투자자별 일별 순매수 추이 (Daily Net Purchase by Investor)', fontsize=16, pad=15, fontweight='bold')
+    ax.set_xlabel('날짜 (Date)', fontsize=12)
+    ax.set_ylabel('순매수 (100M KRW)', fontsize=12)
+    ax.legend(loc='best', fontsize=10, framealpha=0.9)
+    ax.grid(True, alpha=0.3, linestyle='--')
 
     plt.tight_layout()
     plt.savefig(os.path.join(output_dir, 'investor_trends.png'), dpi=300, bbox_inches='tight')
     print(f"\n저장됨: {output_dir}/investor_trends.png")
     plt.close()
 
-    # 2. 누적 순매수 추이
-    fig, ax = plt.subplots(figsize=(15, 6))
+    # 2. 모든 투자자별 누적 순매수 추이
+    fig, ax = plt.subplots(figsize=(16, 8))
 
-    for key, col in plot_columns.items():
-        if col in df.columns:
-            cumulative = (df[col] / 100000000).cumsum()
-            ax.plot(cumulative.index, cumulative.values, label=col, linewidth=2)
+    for idx, col in enumerate(df.columns):
+        cumulative = df_billions[col].cumsum()
+        ax.plot(cumulative.index, cumulative.values,
+                label=col, linewidth=2.5, color=colors[idx % len(colors)])
 
-    ax.axhline(y=0, color='black', linestyle='--', alpha=0.5)
-    ax.set_title('Cumulative Net Purchase by Investor Type', fontsize=14, pad=15)
-    ax.set_ylabel('Cumulative Net Purchase (100M KRW)')
-    ax.legend()
-    ax.grid(True, alpha=0.3)
+    ax.axhline(y=0, color='black', linestyle='--', alpha=0.5, linewidth=1)
+    ax.set_title('투자자별 누적 순매수 추이 (Cumulative Net Purchase by Investor)',
+                 fontsize=16, pad=15, fontweight='bold')
+    ax.set_xlabel('날짜 (Date)', fontsize=12)
+    ax.set_ylabel('누적 순매수 (100M KRW)', fontsize=12)
+    ax.legend(loc='best', fontsize=10, framealpha=0.9)
+    ax.grid(True, alpha=0.3, linestyle='--')
 
     plt.tight_layout()
     plt.savefig(os.path.join(output_dir, 'cumulative_trends.png'), dpi=300, bbox_inches='tight')
     print(f"저장됨: {output_dir}/cumulative_trends.png")
+    plt.close()
+
+    # 3. 투자자별 상세 비교 (서브플롯)
+    n_investors = len(df.columns)
+    fig, axes = plt.subplots(n_investors, 1, figsize=(16, 3*n_investors))
+
+    if n_investors == 1:
+        axes = [axes]
+
+    for idx, col in enumerate(df.columns):
+        axes[idx].plot(df_billions.index, df_billions[col],
+                      linewidth=1.5, color=colors[idx % len(colors)])
+        axes[idx].axhline(y=0, color='red', linestyle='--', alpha=0.3)
+        axes[idx].set_title(f'{col} 순매수 추이', fontsize=12, pad=10, fontweight='bold')
+        axes[idx].set_ylabel('순매수 (억원)', fontsize=10)
+        axes[idx].grid(True, alpha=0.3)
+
+    axes[-1].set_xlabel('날짜 (Date)', fontsize=12)
+
+    plt.tight_layout()
+    plt.savefig(os.path.join(output_dir, 'investor_trends_detailed.png'), dpi=300, bbox_inches='tight')
+    print(f"저장됨: {output_dir}/investor_trends_detailed.png")
     plt.close()
 
 def analyze_correlation(df_investor, df_index, output_dir="results"):

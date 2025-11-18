@@ -45,10 +45,13 @@ python create_web_dashboard.py
 ### 정적 분석 결과 (analyze_data.py)
 `results/` 디렉토리에 다음 파일들이 생성됩니다:
 
-- `investor_trends.png`: 투자자별 일별 순매수 추이
-- `cumulative_trends.png`: 투자자별 누적 순매수 추이
+- `investor_trends.png`: **모든 투자자**(7개) 일별 순매수 추이 (한 차트에 통합)
+- `cumulative_trends.png`: **모든 투자자**(7개) 누적 순매수 추이 (한 차트에 통합)
+- `investor_trends_detailed.png`: 각 투자자별 상세 일별 순매수 추이 (서브플롯)
 - `correlation_heatmap.png`: 투자자별 거래와 코스피 지수 상관관계
 - `analysis_report.md`: 분석 리포트
+
+**포함된 투자자**: 개인, 외국인, 기관, 금융투자, 보험, 투신, 은행 (총 7개)
 
 ### 인터랙티브 대시보드 (create_web_dashboard.py)
 `results/dashboard.html` 파일이 생성됩니다:
@@ -84,11 +87,12 @@ kospi_mining/
 │   ├── kospi_investor_trading.csv
 │   └── kospi_index.csv
 └── results/                   # 분석 결과
-    ├── dashboard.html         # 웹 대시보드 (추천!)
-    ├── investor_trends.png    # 한글 지원
-    ├── cumulative_trends.png  # 한글 지원
-    ├── correlation_heatmap.png # 한글 지원
-    └── analysis_report.md
+    ├── dashboard.html              # 웹 대시보드 (추천!)
+    ├── investor_trends.png         # 7개 투자자 일별 순매수 (통합)
+    ├── cumulative_trends.png       # 7개 투자자 누적 순매수 (통합)
+    ├── investor_trends_detailed.png # 각 투자자별 상세 차트
+    ├── correlation_heatmap.png     # 상관관계 히트맵
+    └── analysis_report.md          # 분석 리포트
 ```
 
 ## 분석 예시
