@@ -22,19 +22,36 @@ KRX API 접근 가능한 경우:
 python collect_data.py
 ```
 
-### 3. 데이터 분석
+### 3. 데이터 분석 (정적 차트)
 ```bash
 python analyze_data.py
 ```
 
+### 4. 웹 대시보드 생성 (추천! 🌟)
+인터랙티브한 웹 대시보드를 생성합니다:
+```bash
+python create_web_dashboard.py
+```
+그 후 브라우저에서 `results/dashboard.html` 파일을 열어보세요!
+
 ## 분석 결과
 
-분석을 실행하면 `results/` 디렉토리에 다음 파일들이 생성됩니다:
+### 정적 분석 결과 (analyze_data.py)
+`results/` 디렉토리에 다음 파일들이 생성됩니다:
 
 - `investor_trends.png`: 투자자별 일별 순매수 추이
 - `cumulative_trends.png`: 투자자별 누적 순매수 추이
 - `correlation_heatmap.png`: 투자자별 거래와 코스피 지수 상관관계
 - `analysis_report.md`: 분석 리포트
+
+### 인터랙티브 대시보드 (create_web_dashboard.py)
+`results/dashboard.html` 파일이 생성됩니다:
+- 📈 투자자별 일별 순매수 추이 (확대/축소 가능)
+- 📊 누적 순매수 추이 (호버로 상세 정보 확인)
+- 📉 코스피 지수 캔들스틱 차트
+- 🔥 투자자별 총 순매수 비교 차트
+- 🎯 상관관계 히트맵
+- 💡 주요 통계 카드
 
 ## 주요 분석 내용
 
@@ -51,12 +68,20 @@ python analyze_data.py
 
 ```
 kospi_mining/
-├── collect_data.py          # 실제 데이터 수집
-├── generate_sample_data.py  # 샘플 데이터 생성
-├── analyze_data.py          # 데이터 분석 및 시각화
-├── requirements.txt         # 필요한 패키지
-├── data/                    # 수집된 데이터
-└── results/                 # 분석 결과
+├── collect_data.py            # 실제 데이터 수집 (KRX API)
+├── generate_sample_data.py    # 샘플 데이터 생성
+├── analyze_data.py            # 정적 차트 생성 (matplotlib/seaborn)
+├── create_web_dashboard.py    # 인터랙티브 웹 대시보드 생성 (Plotly)
+├── requirements.txt           # 필요한 패키지
+├── data/                      # 수집된 데이터
+│   ├── kospi_investor_trading.csv
+│   └── kospi_index.csv
+└── results/                   # 분석 결과
+    ├── dashboard.html         # 웹 대시보드 (추천!)
+    ├── investor_trends.png
+    ├── cumulative_trends.png
+    ├── correlation_heatmap.png
+    └── analysis_report.md
 ```
 
 ## 분석 예시
