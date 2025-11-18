@@ -10,24 +10,30 @@ pip install -r requirements.txt
 
 ## 사용법
 
-### 1. 샘플 데이터 생성
+### 1. 한글 폰트 설치 (처음 한 번만)
+차트에서 한글이 깨지지 않도록 나눔고딕 폰트를 설치합니다:
+```bash
+python setup_font.py
+```
+
+### 2. 샘플 데이터 생성
 실제 API 접근이 제한된 환경에서는 샘플 데이터를 생성합니다:
 ```bash
 python generate_sample_data.py
 ```
 
-### 2. 실제 데이터 수집 (선택사항)
+### 3. 실제 데이터 수집 (선택사항)
 KRX API 접근 가능한 경우:
 ```bash
 python collect_data.py
 ```
 
-### 3. 데이터 분석 (정적 차트)
+### 4. 데이터 분석 (정적 차트)
 ```bash
 python analyze_data.py
 ```
 
-### 4. 웹 대시보드 생성 (추천! 🌟)
+### 5. 웹 대시보드 생성 (추천! 🌟)
 인터랙티브한 웹 대시보드를 생성합니다:
 ```bash
 python create_web_dashboard.py
@@ -68,6 +74,7 @@ python create_web_dashboard.py
 
 ```
 kospi_mining/
+├── setup_font.py              # 한글 폰트 설치 스크립트
 ├── collect_data.py            # 실제 데이터 수집 (KRX API)
 ├── generate_sample_data.py    # 샘플 데이터 생성
 ├── analyze_data.py            # 정적 차트 생성 (matplotlib/seaborn)
@@ -78,9 +85,9 @@ kospi_mining/
 │   └── kospi_index.csv
 └── results/                   # 분석 결과
     ├── dashboard.html         # 웹 대시보드 (추천!)
-    ├── investor_trends.png
-    ├── cumulative_trends.png
-    ├── correlation_heatmap.png
+    ├── investor_trends.png    # 한글 지원
+    ├── cumulative_trends.png  # 한글 지원
+    ├── correlation_heatmap.png # 한글 지원
     └── analysis_report.md
 ```
 
