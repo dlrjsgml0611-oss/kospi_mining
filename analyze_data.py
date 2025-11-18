@@ -4,12 +4,42 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.font_manager as fm
 import seaborn as sns
 from datetime import datetime
 import os
 
-# 한글 폰트 설정
-plt.rcParams['font.family'] = 'DejaVu Sans'
+# 나눔고딕 폰트 설정
+# 사용 가능한 한글 폰트 찾기
+available_fonts = [f.name for f in fm.fontManager.ttflist]
+korean_fonts = ['NanumGothic', 'Nanum Gothic', 'NanumBarunGothic', 'Malgun Gothic',
+                'AppleGothic', 'Apple SD Gothic Neo']
+
+font_to_use = None
+for font in korean_fonts:
+    if font in available_fonts:
+        font_to_use = font
+        break
+
+# 나눔고딕 TTF 파일이 있는 경우 직접 로드
+font_path = os.path.expanduser('~/.fonts/NanumGothic.ttf')
+if os.path.exists(font_path):
+    try:
+        font_prop = fm.FontProperties(fname=font_path)
+        fm.fontManager.addfont(font_path)
+        font_to_use = font_prop.get_name()
+    except Exception as e:
+        print(f"폰트 로드 실패: {e}")
+
+# 폰트 설정
+if font_to_use:
+    plt.rcParams['font.family'] = font_to_use
+    print(f"사용 폰트: {font_to_use}")
+else:
+    # 한글 폰트가 없는 경우 DejaVu Sans 사용 (기본값)
+    plt.rcParams['font.family'] = 'DejaVu Sans'
+    print("경고: 한글 폰트를 찾을 수 없습니다. 영문 폰트를 사용합니다.")
+
 plt.rcParams['axes.unicode_minus'] = False
 
 def load_data(data_dir="data"):

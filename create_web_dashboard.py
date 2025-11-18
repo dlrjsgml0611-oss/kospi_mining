@@ -74,7 +74,8 @@ def create_investor_trends_chart(df):
         showlegend=False,
         title_text="KOSPI Investor Net Purchase Trends (Daily)",
         title_x=0.5,
-        hovermode='x unified'
+        hovermode='x unified',
+        font=dict(family='Nanum Gothic, sans-serif')
     )
 
     return fig
@@ -122,7 +123,8 @@ def create_cumulative_chart(df):
             y=1,
             xanchor="left",
             x=1.01
-        )
+        ),
+        font=dict(family='Nanum Gothic, sans-serif')
     )
 
     return fig
@@ -155,7 +157,8 @@ def create_correlation_heatmap(df_investor, df_index):
         title="Correlation Matrix: Investor Trading vs KOSPI",
         title_x=0.5,
         height=700,
-        width=800
+        width=800,
+        font=dict(family='Nanum Gothic, sans-serif')
     )
 
     return fig
@@ -181,7 +184,8 @@ def create_kospi_index_chart(df_index):
         xaxis_title="Date",
         yaxis_title="Index",
         height=500,
-        xaxis_rangeslider_visible=False
+        xaxis_rangeslider_visible=False,
+        font=dict(family='Nanum Gothic, sans-serif')
     )
 
     return fig
@@ -212,7 +216,8 @@ def create_investor_comparison_chart(df):
         title_x=0.5,
         xaxis_title="Total Net Purchase (100M KRW)",
         yaxis_title="Investor Type",
-        height=500
+        height=500,
+        font=dict(family='Nanum Gothic, sans-serif')
     )
 
     return fig
@@ -237,10 +242,13 @@ def create_html_dashboard(df_investor, df_index, output_file="dashboard.html"):
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KOSPI Investor Trading Analysis Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <style>
         body {{
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Nanum Gothic', sans-serif;
             margin: 0;
             padding: 20px;
             background-color: #f5f6fa;
