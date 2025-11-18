@@ -21,27 +21,29 @@ def generate_sample_investor_data(start_date, end_date, output_dir="data"):
     print(f"총 거래일: {len(dates)} 일\n")
 
     # 실제 투자자별 거래 패턴을 시뮬레이션
+    # 실제 코스피 일일 순매수는 보통 -3000억 ~ +3000억 범위
     np.random.seed(42)
 
-    # 기관투자자: 안정적이고 변동성이 적음
-    institution = np.random.normal(0, 3000, len(dates)) * 100000000  # 단위: 원
+    # 기관투자자: 안정적이고 변동성이 적음 (평균 0, 표준편차 500억)
+    institution = np.random.normal(0, 500, len(dates)) * 100000000  # 단위: 원
 
-    # 외국인: 큰 금액으로 움직이고 트렌드가 있음
-    trend = np.linspace(-2000, 2000, len(dates))  # 점진적 트렌드
-    foreigner = (np.random.normal(trend, 5000, len(dates))) * 100000000
+    # 외국인: 큰 금액으로 움직이고 트렌드가 있음 (평균 -300~+300억, 표준편차 800억)
+    trend = np.linspace(-300, 300, len(dates))  # 점진적 트렌드
+    foreigner = np.random.normal(trend, 800, len(dates)) * 100000000
 
     # 개인: 외국인과 반대 패턴 (외국인이 사면 개인이 팔고, 외국인이 팔면 개인이 사는 경향)
-    individual = -(foreigner + institution) + np.random.normal(0, 1000, len(dates)) * 100000000
+    # 개인 = -(외국인 + 기관) + 노이즈
+    individual = -(foreigner + institution) + np.random.normal(0, 200, len(dates)) * 100000000
 
     # 데이터프레임 생성
     df = pd.DataFrame({
         '개인': individual,
         '외국인': foreigner,
         '기관': institution,
-        '금융투자': institution * 0.6 + np.random.normal(0, 1000, len(dates)) * 100000000,
-        '보험': institution * 0.2 + np.random.normal(0, 500, len(dates)) * 100000000,
-        '투신': institution * 0.15 + np.random.normal(0, 500, len(dates)) * 100000000,
-        '은행': institution * 0.05 + np.random.normal(0, 200, len(dates)) * 100000000,
+        '금융투자': institution * 0.6 + np.random.normal(0, 300, len(dates)) * 100000000,
+        '보험': institution * 0.2 + np.random.normal(0, 150, len(dates)) * 100000000,
+        '투신': institution * 0.15 + np.random.normal(0, 150, len(dates)) * 100000000,
+        '은행': institution * 0.05 + np.random.normal(0, 80, len(dates)) * 100000000,
     }, index=dates)
 
     # 데이터 저장
